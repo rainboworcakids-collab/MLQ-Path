@@ -1,5 +1,5 @@
 // result.js - เวอร์ชันอัปเดต พร้อมโหลดจาก Supabase Storage
-console.log('🚀 DEBUG: result.js loaded - v12-Supabase-Storage');
+console.log('🚀 DEBUG: result.js loaded - v12.1-Supabase-Storage');
 
 // Configuration
 const currentPath = window.location.pathname;
@@ -562,27 +562,12 @@ function createResultSection(result, index) {
     buttonsHTML += `
         <button onclick="openLifePathMusicCreator(${index})" 
             class="result-button tw-bg-gradient-to-r tw-from-pink-500 tw-to-rose-600 tw-text-white tw-py-3 tw-px-6 tw-rounded-full hover:tw-from-pink-600 hover:tw-to-rose-700 tw-cursor-pointer tw-w-56 tw-inline-block tw-m-1">
-            <span class="button-line">สร้างบทเพลงที่ 1</span>
-            <span class="button-line">เส้นชีวิต</span>
-        </button>
-    
-        <button onclick="openPsychomatrixMusicCreator(${index})" 
-            class="result-button tw-bg-gradient-to-r tw-from-indigo-500 tw-to-purple-600 tw-text-white tw-py-3 tw-px-6 tw-rounded-full hover:tw-from-indigo-600 hover:tw-to-purple-700 tw-cursor-pointer tw-w-56 tw-inline-block tw-m-1">
-            <span class="button-line">สร้างบทเพลงที่ 2</span>
-            <span class="button-line">Psychomatrix</span>
+            <span class="button-line">สร้างบทเพลง</span>
+            <span class="button-line">เลขเส้นชีวิต</span>
         </button>
     `;
-    
-    
-    // เพิ่มปุ่มฟังเพลง Lo-Fi/Chill
-    buttonsHTML += `
-        <button onclick="window.musicModule.showMusicPlayer(${index})" 
-                class="result-button tw-bg-gradient-to-r tw-from-teal-500 tw-to-cyan-600 tw-text-white tw-py-3 tw-px-6 tw-rounded-full hover:tw-from-teal-600 hover:tw-to-cyan-700 tw-cursor-pointer tw-w-56 tw-inline-block tw-m-1">
-            <span class="button-line">ฟังเพลง</span>
-            <span class="button-line">Lo-Fi/Chill</span>
-        </button>
-    `;
-    
+
+
     return `
         <div class="result-section tw-mb-8 tw-p-6 tw-bg-white tw-rounded-lg tw-shadow">
             <div class="section-header tw-text-xl tw-font-bold tw-text-blue-800 tw-mb-4 tw-pb-2 tw-border-b">
@@ -837,7 +822,11 @@ window.openLifePathMusicCreator = function(resultIndex) {
     console.log('✅ Music data saved to sessionStorage:', musicData);
     
     // 4. เปิดหน้า music-creator.html
-    window.location.href = 'music-creator.html?type=lifePath';
+    // window.location.href = 'music-creator.html?type=lifePath';
+    
+    window.location.href = 'https://rainboworcakids-collab.github.io/psychomatrix-music-ecosystem/apps/music-promo-pwa/';
+    
+    
 };
 
 window.openPsychomatrixMusicCreator = function(resultIndex) {
