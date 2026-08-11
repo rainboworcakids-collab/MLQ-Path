@@ -273,7 +273,7 @@ async function callPsychomatrixAPI(formData) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'apikey': window.SUPABASE_ANON_KEY || ''  
+                'apikey': window.SUPABASE_ANON_KEY || ''
             },
             body: JSON.stringify(payload),
             mode: 'cors',
