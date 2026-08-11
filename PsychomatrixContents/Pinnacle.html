@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pinnacle Cycle</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../css/PsychomatrixStyle.css">
+</head>
+<body>
+    <div class="pinnacle-container">
+        <h1><i class="fas fa-mountain"></i> Pinnacle Cycle</h1>
+        <div id="pinnacleCharts"></div>
+        <div id="pinnacleAnalysis"></div>
+    </div>
+    
+    <script>
+        // อ่านข้อมูลจาก sessionStorage
+        const results = JSON.parse(sessionStorage.getItem('psychomatrixFullResults'));
+        
+        if (results && results[0] && results[0].data.pinnacle) {
+            const pinnacle = results[0].data.pinnacle;
+            
+            // สร้างกราฟแต่ละช่วง (ใช้โค้ดจาก pinnacle.php ที่แปลงเป็น JavaScript)
+            renderPinnacleCharts(pinnacle);
+            
+            // แสดงการวิเคราะห์
+            renderPinnacleAnalysis(pinnacle);
+        }
+    </script>
+</body>
+</html>
