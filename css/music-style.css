@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: #020617; /* ดำสนิทแบบ V2 */
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.glass {
+    background: rgba(15, 23, 42, 0.7); /* เข้มขึ้นเพื่อให้ข้อความสีขาวอ่านง่าย */
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#displayArea {
+    background: radial-gradient(circle at center, rgba(30, 41, 59, 0.5) 0%, #020617 100%);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+}
+
+/* Elemental Glows */
+.glow-fire { box-shadow: 0 0 40px rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.3) !important; }
+.glow-water { box-shadow: 0 0 40px rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.3) !important; }
+.glow-wood { box-shadow: 0 0 40px rgba(34, 197, 94, 0.2); border-color: rgba(34, 197, 94, 0.3) !important; }
+.glow-earth { box-shadow: 0 0 40px rgba(234, 179, 8, 0.2); border-color: rgba(234, 179, 8, 0.3) !important; }
+.glow-gold { box-shadow: 0 0 40px rgba(248, 250, 252, 0.2); border-color: rgba(248, 250, 252, 0.3) !important; }
+
+.animate-spin-slow {
+    animation: spin 15s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.visualizer-bar {
+    width: 6px;
+    border-radius: 3px;
+    transition: height 0.1s ease;
+}
+
+/* ปรับแต่ง Scrollbar ให้ดู Lo-fi */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }

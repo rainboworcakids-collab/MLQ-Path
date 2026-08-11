@@ -405,7 +405,6 @@ button[type="submit"]:hover {
     background-color: rgba(239, 68, 68, 0.1);
 }
 
-/* เพิ่มใน PsychomatrixStyle.css */
 #surroundingDataModal .bg-white {
     max-height: 90vh;
     overflow-y: auto;
@@ -420,3 +419,37 @@ button[type="submit"]:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+
+
+/* บทเพลงชีวิต */
+@keyframes noteGlow {
+    0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+}
+
+.note-active {
+    animation: noteGlow 1.5s infinite;
+}
+
+/* สไตล์สำหรับ sheet music */
+#sheetMusic {
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+    font-size: 1.5rem;
+    line-height: 2;
+    padding: 1rem;
+    background: #1a202c;
+    border-radius: 0.5rem;
+}
+
+/* ปุ่มเล่นเสียง */
+#playButton.playing {
+    background-color: #f59e0b !important;
+}
+
+/* เอฟเฟกต์โน้ตเมื่อเล่น */
+.note-playing {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
