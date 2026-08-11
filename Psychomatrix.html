@@ -31,12 +31,13 @@
         });
     </script>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    
+
+<body class="font-sarabun bg-gray-50">
     <!-- Main Container -->
-    <div class="Container">
+    <div class="psycho-gradient -mt-2">
         <!-- Header -->
         <div class="text-center mb-6 p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg">
+            
             <nav class="bg-gradient-to-r from-blue-800 to-purple-800 p-4 shadow-md">
                 <div class="container mx-auto flex justify-between items-center">
                     <h1 class="text-3xl font-bold text-white mb-2"><img src="images/PsychomatixAnalize.png" alt="Logo" class="h-16 w-16 inline mr-2"> Psychomatrix Analysis
@@ -52,9 +53,7 @@
         </div>
         
         <!-- Analysis Form -->
-        <form id="psychomatrixForm" class="no-print max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-2xl" 
-      action="javascript:void(0);" 
-      onsubmit="return false;">
+        <form id="psychomatrixForm" class="no-print max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-2xl"  action="javascript:void(0);" onsubmit="return false;">
 
             <!-- Section 1: Birth Date -->
             <div class="section1 mb-6 p-5 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 border border-gray-200">	
@@ -250,7 +249,7 @@
 
     <script src="js/supabase-config.js"></script>
     <script src="js/auth_status_manager.js"></script>
-    <!-- script src="js/nav.js"></script -->
+    <script src="js/nav.js"></script>
 
     <!--  โหลด Debug Logger ก่อน -->
     <script src="js/debug-logger.js"></script>

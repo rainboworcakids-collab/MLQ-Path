@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ศูนย์พัฒนาสมอง | Parent Dashboard · รายงาน Executive Control</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="tailwindcss.css">
+    <link rel="stylesheet" href="custom.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/auth_status_manager.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f3ed 0%, #ede6dc 100%);
+            font-family: 'Inter', 'Sarabun', sans-serif;
+            color: #2c2b28;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            border: 1px solid rgba(242, 226, 207, 0.7);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+        .skill-progress {
+            transition: width 1s ease-in-out;
+        }
+        .day-cell {
+            transition: all 0.2s ease;
+        }
+        .day-cell:hover {
+            transform: translateY(-2px);
+        }
+        .stat-card {
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="p-3 md:p-8">
+
+<div class="max-w-6xl mx-auto">
+    <!-- header ส่วนหัว + ชื่อผู้เรียน + logout -->
+    <div class="glass-card p-6 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-4">
+            <div class="bg-indigo-100 p-3 rounded-2xl text-indigo-600 text-2xl">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">MLQ Executive Control Training</h1>
+                <p class="text-sm text-gray-500">แดชบอร์ดรายงานผลและแผนพัฒนาทักษะสมองเชิงลึกสำหรับผู้ปกครอง</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 bg-orange-50 p-3 rounded-2xl border border-orange-100">
+            <div class="text-right">
+                <p class="text-xs text-gray-400">ชื่อนักเรียน</p>
+                <p id="userNameDisplay" class="font-bold text-gray-800 text-sm">กำลังโหลด...</p>
+                <p id="userEmailDisplay" class="text-xs text-gray-500 hidden"></p>
+            </div>
+            <button id="logoutBtn" class="text-gray-400 hover:text-red-500 p-1 text-sm" title="ออกจากระบบ">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 4 สถิติรวม (ภาพรวม) -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="glass-card p-4 text-center stat-card">
+            <p class="text-xs text-gray-400 font-medium mb-1">ความคืบหน้าภาพรวม</p>
+            <p id="statProgress" class="text-2xl font-bold text-indigo-600">0/21 วัน</p>
+        </div>
+        <div class="glass-card p-4 text-center stat-card">
+            <p class="text-xs text-gray-400 font-medium mb-1">ความแม่นยำเฉลี่ย</p>
+            <p id="statAccuracy" class="text-2xl font-bold text-emerald-600">--%</p>
+        </div>
+        <div class="glass-card p-4 text-center stat-card">
+            <p class="text-xs text-gray-400 font-medium mb-1">เวลาตอบสนองเฉลี่ย</p>
+            <p id="statSpeed" class="text-2xl font-bold text-amber-600">-- ms</p>
+        </div>
+        <div class="glass-card p-4 text-center stat-card">
+            <p class="text-xs text-gray-400 font-medium mb-1">ทักษะที่โดดเด่นที่สุด</p>
+            <p id="statTopSkill" class="text-sm font-bold text-purple-600 mt-2 truncate">กำลังวิเคราะห์...</p>
+        </div>
+    </div>
+
+    <!-- ส่วนวิเคราะห์ดัชนี 5 ทักษะ (อิงข้อมูลจริงจากฐาน) -->
+    <div class="glass-card p-6 mb-6">
+        <div class="flex items-center gap-2 mb-6 border-b border-gray-100 pb-3">
+            <span class="text-indigo-600"><i class="fas fa-chart-radar text-lg"></i></span>
+            <h2 class="text-lg font-bold text-gray-800">วิเคราะห์ดัชนีชี้วัด 5 ทักษะหลักป้องกันความสับเพร่า</h2>
+        </div>
+        <div id="skillsReportContainer" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <!-- dynamic cards จะถูกสร้างจาก JS -->
+        </div>
+        <p class="text-xs text-gray-400 mt-4 bg-gray-50 p-2 rounded-xl"><i class="fas fa-info-circle"></i> คะแนนแต่ละทักษะคำนวณจากอัตราความแม่นยำ (100 – false alarm rate) เฉลี่ยของภารกิจที่ผ่านมา ยิ่งสูงหมายถึงการยับยั้งและโฟกัสดีขึ้น</p>
+    </div>
+
+    <!-- แผนผังการฝึกอบรม 21 วัน (Skill Roadmap + ความสำเร็จ) -->
+    <div class="glass-card p-6 mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-6 border-b border-gray-100 pb-3">
+            <div class="flex items-center gap-2">
+                <span class="text-orange-500"><i class="fas fa-calendar-alt text-lg"></i></span>
+                <h2 class="text-lg font-bold text-gray-800">แผนผังการฝึกอบรมและจุดเน้นรายทักษะใน 21 วัน (21-Day Training Matrix)</h2>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs">
+                <span class="px-2 py-1 rounded-md bg-rose-50 text-rose-600 border border-rose-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span>ทักษะที่ 1</span>
+                <span class="px-2 py-1 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>ทักษะที่ 2</span>
+                <span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 border border-amber-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span>ทักษะที่ 3</span>
+                <span class="px-2 py-1 rounded-md bg-sky-50 text-sky-600 border border-sky-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sky-500"></span>ทักษะที่ 4</span>
+                <span class="px-2 py-1 rounded-md bg-purple-50 text-purple-600 border border-purple-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span>ทักษะที่ 5</span>
+            </div>
+        </div>
+        <p class="text-xs text-gray-400 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-100"><i class="fas fa-info-circle mr-1"></i> <strong>คำอธิบายสำหรับผู้ปกครอง:</strong> สัญลักษณ์ <i class="fas fa-check-circle text-emerald-500"></i> หมายถึงภารกิจประจำวันสำเร็จแล้ว แถบสีแสดงให้เห็นว่าในแต่ละวันระบบมุ่งเน้นฝึกฝนฟังก์ชันสมองชิ้นไหนเป็นพิเศษ</p>
+        <div id="roadmapGrid" class="grid grid-cols-2 sm:grid-cols-7 gap-3">
+            <!-- day cells dynamic -->
+        </div>
+    </div>
+
+    <!-- ส่วนสรุปคะแนนรวมและไข่ (เชื่อมโยงกับ DB) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-6 text-center">
+            <i class="fas fa-flag-checkered text-3xl text-amber-500 mb-2"></i>
+            <div class="text-2xl font-bold" id="completedDaysTotal">0</div>
+            <div class="text-sm text-gray-500">วันที่ทำสำเร็จ / 21 วัน</div>
+        </div>
+        <div class="glass-card p-6 text-center">
+            <i class="fas fa-chart-simple text-3xl text-green-500 mb-2"></i>
+            <div class="text-2xl font-bold" id="avgAccuracyOverall">0%</div>
+            <div class="text-sm text-gray-500">ความแม่นยำเฉลี่ย (ACC)</div>
+        </div>
+        <div class="glass-card p-6 text-center">
+            <i class="fas fa-egg text-3xl text-yellow-500 mb-2"></i>
+            <div class="text-2xl font-bold" id="totalEggsCount">0</div>
+            <div class="text-sm text-gray-500">ไข่ทั้งหมดที่ได้รับ (รางวัลความแม่นยำ)</div>
+        </div>
+    </div>
+
+    <div class="text-center py-4 text-xs text-gray-400 mt-6">
+        <i class="fas fa-chart-simple"></i> อัปเดตทุกครั้งที่เล่นเกมเสร็จ ข้อมูลแสดงผลล่าสุดจากเซิร์ฟเวอร์
+    </div>
+</div>
+
+<script>
+    // ---------- Configuration ----------
+    const PROJECT_ID = "MLQ-EC-21DAY";
+    let currentUser = null;
+
+    // Mapping วัน -> ทักษะ (ตามหลักสูตร MLQ)
+    const daySkillMapping = {
+        1: "stopsignal", 2: "stopsignal", 3: "gongonogo", 4: "gongonogo", 5: "gamified", 6: "gamified", 7: "stopsignal",
+        8: "gongonogo",  9: "owltask",    10: "owltask",   11: "cogfun",    12: "cogfun",   13: "gamified",  14: "owltask",
+        15: "stopsignal", 16: "gongonogo", 17: "gamified",  18: "owltask",   19: "cogfun",   20: "owltask",   21: "cogfun"
+    };
+
+    // คำอธิบายทักษะ + สี (สอดคล้องกับ ec_dashboard)
+    const skillDefinitions = {
+        stopsignal: { name: "1. ยับยั้งชั่งใจ (Response Inhibition)", short: "Slow is Smooth", color: "rose", desc: "ควบคุมความลนลาน หยุดมือทันทีเมื่อพบสิ่งกีดขวาง" },
+        gongonogo:  { name: "2. คัดกรองสายตา (Visual Discrimination)", short: "One Channel at a Time", color: "emerald", desc: "คัดแยกสิ่งเร้าที่คล้ายกัน รวดเร็วขึ้น" },
+        gamified:   { name: "3. ควบคุมกายภาพ (Physical Control)", short: "Externalize Thinking", color: "amber", desc: "ประสานจังหวะมือ-ตา-เสียง ภายใต้แรงกดดัน" },
+        owltask:    { name: "4. ตรวจจับรายละเอียด (Detail Scanning)", short: "Verification Habit", color: "sky", desc: "สแกนรายละเอียดย่อย ป้องกันการหลงกล" },
+        cogfun:     { name: "5. สมาธิจดจ่อคงอยู่ (Sustained Attention)", short: "Train Pattern Interrupt", color: "purple", desc: "รักษาระดับโฟกัสแม้เจอตัวรบกวน" }
+    };
+
+    // ฟังก์ชันดึงข้อมูล missions และ eggs
+    async function loadDashboardData() {
+        const supabase = await getSupabaseClient();
+        if (!supabase || !currentUser) return;
+
+        // 1. ดึง user_missions ที่เกี่ยวข้องกับโปรเจคนี้
+        const { data: missions, error } = await supabase
+            .from('user_missions')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .eq('project_id', PROJECT_ID);
+        if (error) {
+            console.error("Error loading missions:", error);
+            return;
+        }
+
+        // 2. ดึงจำนวนไข่ทั้งหมดจากตาราง user_eggs (ถ้ามี)
+        const { data: eggsData } = await supabase
+            .from('user_eggs')
+            .select('id')
+            .eq('user_id', currentUser.id)
+            .eq('project_id', PROJECT_ID);
+        const totalEggs = eggsData?.length || 0;
+
+        // ---- เตรียมข้อมูล ----
+        const completedSet = new Set();           // วันที่สำเร็จ
+        let sumAccuracy = 0;                     // ผลรวมความแม่นยำ (100 - false_alarm_rate)
+        let sumResponseTime = 0;
+        let countWithRt = 0;
+        let completedCount = 0;
+
+        // เก็บคะแนนแยกตามทักษะ (key: skillKey, value: array ของ accuracy)
+        const skillScores = {
+            stopsignal: [],
+            gongonogo: [],
+            gamified: [],
+            owltask: [],
+            cogfun: []
+        };
+
+        if (missions && missions.length) {
+            missions.forEach(mission => {
+                if (mission.mission_id && mission.mission_id.startsWith('day_') && mission.status === 'COMPLETED') {
+                    const dayNum = parseInt(mission.mission_id.replace('day_', ''));
+                    if (!isNaN(dayNum)) {
+                        completedSet.add(dayNum);
+                        completedCount++;
+                        // ดึง false alarm rate จาก parent_notes (ตามโครงสร้าง ec_course_hub)
+                        let falseAlarm = 100; // default high
+                        let rt = null;
+                        let scoreVal = mission.score || 0;
+                        if (mission.parent_notes && typeof mission.parent_notes === 'object') {
+                            falseAlarm = mission.parent_notes.false_alarm_rate;
+                            rt = mission.parent_notes.avg_response_ms;
+                        } else if (mission.meta && typeof mission.meta === 'object') {
+                            falseAlarm = mission.meta.false_alarm_rate;
+                            rt = mission.meta.avg_response_ms;
+                        }
+                        // ความแม่นยำ = 100 - falseAlarm
+                        let accuracy = 100 - (falseAlarm || 0);
+                        if (isNaN(accuracy)) accuracy = 50;
+                        accuracy = Math.min(100, Math.max(0, accuracy));
+                        sumAccuracy += accuracy;
+
+                        // เวลาตอบสนอง
+                        if (rt && typeof rt === 'number') {
+                            sumResponseTime += rt;
+                            countWithRt++;
+                        }
+
+                        // จัดเก็บคะแนนตาม skill ของวันนั้น
+                        const skillKey = daySkillMapping[dayNum];
+                        if (skillKey && skillScores[skillKey]) {
+                            skillScores[skillKey].push(accuracy);
+                        }
+                    }
+                }
+            });
+        }
+
+        const avgAccuracy = completedCount > 0 ? Math.round(sumAccuracy / completedCount) : 0;
+        const avgRT = countWithRt > 0 ? Math.round(sumResponseTime / countWithRt) : 0;
+
+        // อัปเดตสถิติรวมด้านบน
+        document.getElementById('statProgress').innerText = `${completedCount}/21 วัน`;
+        document.getElementById('statAccuracy').innerText = avgAccuracy > 0 ? `${avgAccuracy}%` : '--%';
+        document.getElementById('statSpeed').innerText = avgRT > 0 ? `${avgRT} ms` : '-- ms';
+        document.getElementById('completedDaysTotal').innerText = completedCount;
+        document.getElementById('avgAccuracyOverall').innerText = avgAccuracy > 0 ? `${avgAccuracy}%` : '0%';
+        document.getElementById('totalEggsCount').innerText = totalEggs;
+
+        // คำนวณทักษะที่โดดเด่น (ค่าเฉลี่ยสูงสุด)
+        let bestSkillKey = null;
+        let bestAvg = -1;
+        for (const [key, arr] of Object.entries(skillScores)) {
+            if (arr.length === 0) continue;
+            const avg = arr.reduce((a,b)=>a+b,0)/arr.length;
+            if (avg > bestAvg) {
+                bestAvg = avg;
+                bestSkillKey = key;
+            }
+        }
+        let topSkillName = "รอข้อมูลก่อน";
+        if (bestSkillKey && skillDefinitions[bestSkillKey]) {
+            topSkillName = skillDefinitions[bestSkillKey].short || skillDefinitions[bestSkillKey].name.split(" ")[1];
+        }
+        document.getElementById('statTopSkill').innerText = completedCount > 0 ? topSkillName : "ยังไม่มีข้อมูล";
+
+        // ---- Render 5 ทักษะ progress cards (ใช้ข้อมูลจริง) ----
+        const reportContainer = document.getElementById('skillsReportContainer');
+        reportContainer.innerHTML = '';
+
+        Object.keys(skillDefinitions).forEach(key => {
+            const def = skillDefinitions[key];
+            const scores = skillScores[key];
+            const avgScore = scores.length > 0 ? Math.round(scores.reduce((a,b)=>a+b,0) / scores.length) : 0;
+            const trainCount = scores.length;
+
+            let statusBadge = `<span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full font-medium">ยังไม่เริ่มฝึก</span>`;
+            let barColor = `bg-gray-300`;
+            if (trainCount > 0) {
+                if (avgScore >= 85) {
+                    statusBadge = `<span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium"><i class="fas fa-star mr-1"></i>ดีเยี่ยม</span>`;
+                    barColor = `bg-emerald-500`;
+                } else if (avgScore >= 65) {
+                    statusBadge = `<span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded-full font-medium">ทำได้ดี</span>`;
+                    barColor = `bg-indigo-500`;
+                } else {
+                    statusBadge = `<span class="bg-rose-100 text-rose-700 text-xs px-2 py-0.5 rounded-full font-medium">ควรฝึกเพิ่ม</span>`;
+                    barColor = `bg-rose-400`;
+                }
+            }
+
+            const card = document.createElement('div');
+            card.className = `border border-gray-100 rounded-2xl p-4 bg-gradient-to-b from-white to-gray-50 flex flex-col justify-between`;
+            card.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-start gap-1 mb-2">
+                        <h3 class="text-sm font-bold text-gray-800 leading-tight">${def.name}</h3>
+                        ${statusBadge}
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">${def.desc}</p>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs text-gray-500 mb-1">
+                        <span>ฝึกแล้ว: ${trainCount} ครั้ง</span>
+                        <span class="font-bold text-gray-700">${avgScore}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                        <div class="skill-progress ${barColor} h-2 rounded-full" style="width: ${avgScore}%"></div>
+                    </div>
+                </div>
+            `;
+            reportContainer.appendChild(card);
+        });
+
+        // ---- สร้างแผนผัง 21 วัน (Roadmap) พร้อมสถานะสำเร็จ ----
+        const gridContainer = document.getElementById('roadmapGrid');
+        gridContainer.innerHTML = '';
+        for (let day = 1; day <= 21; day++) {
+            const targetSkillKey = daySkillMapping[day];
+            const skillDef = skillDefinitions[targetSkillKey];
+            const isDone = completedSet.has(day);
+
+            let borderStyle = `border-gray-200`;
+            let bgStyle = `bg-white`;
+            let textColor = `text-gray-700`;
+            let dotColor = `bg-gray-400`;
+
+            if (skillDef.color === "rose") { bgStyle = "bg-rose-50/40"; borderStyle = "border-rose-100"; textColor = "text-rose-900"; dotColor="bg-rose-500"; }
+            if (skillDef.color === "emerald") { bgStyle = "bg-emerald-50/40"; borderStyle = "border-emerald-100"; textColor = "text-emerald-900"; dotColor="bg-emerald-500"; }
+            if (skillDef.color === "amber") { bgStyle = "bg-amber-50/40"; borderStyle = "border-amber-100"; textColor = "text-amber-900"; dotColor="bg-amber-500"; }
+            if (skillDef.color === "sky") { bgStyle = "bg-sky-50/40"; borderStyle = "border-sky-100"; textColor = "text-sky-900"; dotColor="bg-sky-500"; }
+            if (skillDef.color === "purple") { bgStyle = "bg-purple-50/40"; borderStyle = "border-purple-100"; textColor = "text-purple-900"; dotColor="bg-purple-500"; }
+
+            const cell = document.createElement('div');
+            cell.className = `day-cell border p-3 rounded-2xl flex flex-col justify-between min-h-[90px] ${bgStyle} ${borderStyle} relative`;
+            let stampIcon = isDone ? `<i class="fas fa-check-circle text-emerald-500 absolute top-2 right-2 text-base"></i>` : '';
+            if (isDone) {
+                cell.classList.add('shadow-sm');
+                cell.style.borderWidth = "2px";
+                cell.style.borderColor = "#10b981";
+            }
+
+            // แสดงชื่อ skill แบบสั้น
+            let skillShort = skillDef.short || skillDef.name.split(". ")[1] || "ฝึกสมาธิ";
+            cell.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-bold ${textColor}">Day ${day}</span>
+                    ${stampIcon}
+                </div>
+                <div class="mt-2">
+                    <div class="flex items-center gap-1 mb-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
+                        <p class="text-[11px] font-bold ${textColor} truncate" title="${skillDef.name}">${skillShort}</p>
+                    </div>
+                    <p class="text-[9px] text-gray-400 truncate">${isDone ? '✨ สำเร็จภารกิจ' : '🔒 ยังไม่เริ่มฝึก'}</p>
+                </div>
+            `;
+            gridContainer.appendChild(cell);
+        }
+    }
+
+    // โหลดโปรไฟล์ผู้ใช้
+    async function loadUserInfo() {
+        const supabase = await getSupabaseClient();
+        if (!supabase || !currentUser) return;
+        const { data: profile } = await supabase
+            .from('users')
+            .select('display_name, email')
+            .eq('uid', currentUser.id)
+            .single();
+        if (profile) {
+            document.getElementById('userNameDisplay').innerText = profile.display_name || currentUser.email.split('@')[0];
+            document.getElementById('userEmailDisplay').innerText = profile.email;
+        } else {
+            document.getElementById('userNameDisplay').innerText = currentUser.email.split('@')[0];
+            document.getElementById('userEmailDisplay').innerText = currentUser.email;
+        }
+    }
+
+    // logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        if (window.handleLogout) await handleLogout();
+        else window.location.href = "login_supabase.html";
+    });
+
+    window.onload = async () => {
+        const session = await checkCurrentSession();
+        if (!session) {
+            window.location.href = "login_supabase.html";
+            return;
+        }
+        currentUser = session.user;
+        await loadUserInfo();
+        await loadDashboardData();
+    };
+</script>
+</body>
+</html>

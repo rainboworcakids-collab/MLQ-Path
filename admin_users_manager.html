@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +19,10 @@
     
     <!-- SweetAlert2 สำหรับ Dialog สวยงาม -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 
 <body class="font-sarabun bg-gray-50">
-    <!-- Admin Header (Simple) -->
+    <!-- Admin Header -->
     <div class="bg-white shadow-md border-b border-gray-200">
         <div class="container mx-auto px-4 py-3">
             <div class="flex justify-between items-center">
@@ -52,7 +50,6 @@
     </div>
 
     <div class="container mx-auto px-4 py-8">
-
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
@@ -63,18 +60,15 @@
             </div>
             
             <div class="flex gap-3">
-                <!-- ปุ่มกลับหน้า Dashboard -->
                 <a href="admin_dashboard.html" 
                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center transition duration-200">
                     <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                 </a>
-                
+                <button onclick="showAddUserModal()" 
+                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg flex items-center transition duration-200">
+                    <i class="fas fa-plus mr-2"></i>เพิ่มผู้ใช้ใหม่
+                </button>
             </div>
-        </div>
-
-        <!-- RPC Status Alert -->
-        <div id="rpcStatusAlert" class="hidden mb-6">
-            <!-- จะแสดงสถานะ RPC functions -->
         </div>
 
         <!-- Stats Cards -->
@@ -131,7 +125,7 @@
                 <div class="flex-1">
                     <div class="relative">
                         <input type="text" id="searchInput" 
-                               placeholder="ค้นหาตามชื่อ, อีเมล, UID..."
+                               placeholder="ค้นหาตามชื่อ, อีเมล..."
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
@@ -140,12 +134,10 @@
                     <select id="roleFilter" 
                             class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
                         <option value="all">บทบาททั้งหมด</option>
-                        <!-- จะโหลดจาก roles table -->
                     </select>
                     <select id="gradeFilter" 
                             class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
                         <option value="all">ชั้นเรียนทั้งหมด</option>
-                        <!-- จะโหลดจาก grades table -->
                     </select>
                     <button onclick="loadUsers()" 
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
@@ -199,7 +191,7 @@
             </div>
         </div>
 
-        <!-- No Data Message (hidden by default) -->
+        <!-- No Data Message -->
         <div id="noDataMessage" class="hidden text-center py-12">
             <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-500 mb-2">ไม่พบข้อมูลผู้ใช้</h3>
@@ -212,15 +204,13 @@
 
         <!-- Back Button -->
         <div class="text-center">
-            <a href="index.html" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
-                <i class="fas fa-arrow-left mr-2"></i>กลับไปหน้าหลัก
+            <a href="admin_dashboard.html" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
+                <i class="fas fa-arrow-left mr-2"></i>กลับไปหน้า Dashboard
             </a>
         </div>
     </div>
 
-    <!-- =============================================== -->
-    <!-- MODAL 1: Add/Edit User Modal (hidden by default) -->
-    <!-- =============================================== -->
+    <!-- MODAL 1: Add/Edit User Modal -->
     <div id="userModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
             <div class="flex justify-between items-center pb-3 border-b">
@@ -235,7 +225,7 @@
                     <input type="hidden" id="userId">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- UID (แสดงเมื่อแก้ไข) -->
+                        <!-- UID -->
                         <div class="md:col-span-2">
                             <label class="block text-gray-700 text-sm font-bold mb-2">
                                 <i class="fas fa-id-card mr-1"></i>UID
@@ -270,7 +260,7 @@
                             </p>
                         </div>
 
-                        <!-- Password สำหรับการเพิ่มผู้ใช้ใหม่ -->
+                        <!-- Password -->
                         <div class="md:col-span-2" id="passwordContainer">
                             <label class="block text-gray-700 text-sm font-bold mb-2">
                                 <i class="fas fa-lock mr-1"></i>รหัสผ่าน *
@@ -302,7 +292,6 @@
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                    required>
                                 <option value="">เลือกบทบาท</option>
-                                <!-- จะโหลดจาก roles table -->
                             </select>
                         </div>
 
@@ -314,7 +303,6 @@
                             <select id="grade" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 <option value="">ไม่ได้ระบุ</option>
-                                <!-- จะโหลดจาก grades table -->
                             </select>
                         </div>
 
@@ -398,91 +386,12 @@
         </div>
     </div>
 
-    <!-- =============================================== -->
-    <!-- MODAL 2: Change Password Modal -->
-    <!-- =============================================== -->
-    <div id="passwordModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
-            <div class="flex justify-between items-center pb-3 border-b">
-                <h3 id="passwordModalTitle" class="text-2xl font-bold text-gray-700">
-                    <i class="fas fa-key mr-2"></i>เปลี่ยนรหัสผ่าน
-                </h3>
-                <button onclick="closePasswordModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            
-            <div class="mt-6">
-                <form id="passwordForm" onsubmit="updatePassword(event)">
-                    <input type="hidden" id="passwordUserId">
-                    
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            <i class="fas fa-user mr-1"></i>ผู้ใช้
-                        </label>
-                        <p id="passwordUserName" class="text-lg font-semibold text-gray-800"></p>
-                        <p id="passwordUserEmail" class="text-sm text-gray-600"></p>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            <i class="fas fa-lock mr-1"></i>รหัสผ่านใหม่ *
-                        </label>
-                        <input type="password" id="newPassword" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                               placeholder="รหัสผ่านใหม่"
-                               minlength="6"
-                               required>
-                        <p class="text-xs text-gray-500 mt-1">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร</p>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            <i class="fas fa-lock mr-1"></i>ยืนยันรหัสผ่านใหม่ *
-                        </label>
-                        <input type="password" id="confirmPassword" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                               placeholder="ยืนยันรหัสผ่านใหม่"
-                               minlength="6"
-                               required>
-                    </div>
-                    
-                    <!-- Password Strength Indicator -->
-                    <div class="mb-6">
-                        <div class="flex justify-between mb-1">
-                            <span class="text-xs text-gray-600">ความแข็งแกร่งของรหัสผ่าน:</span>
-                            <span id="passwordStrength" class="text-xs">-</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div id="passwordStrengthBar" class="bg-red-500 h-2 rounded-full" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="flex justify-end space-x-3 mt-8 pt-4 border-t">
-                        <button type="button" onclick="closePasswordModal()"
-                                class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-                            ยกเลิก
-                        </button>
-                        <button type="submit" id="passwordSubmitButton"
-                                class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-save mr-2"></i>อัพเดตรหัสผ่าน
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- Scripts -->
     <script src="js/supabase-config.js"></script>
     <script src="js/auth_status_manager.js"></script>
-    <script src="js/debug-logger.js"></script>
-    <script src="js/admin-rpc-checker.js"></script>
-    
     <script>
 // ===============================================
-// Admin Users Manager (Version 8)
+// Admin Users Manager (Version แก้ไขการตรวจสอบสิทธิ์)
 // ===============================================
 
 // Global variables
@@ -490,149 +399,181 @@ let currentUsers = [];
 let currentRoles = [];
 let currentGrades = [];
 let isEditMode = false;
-let currentAdminId = null;
-
-// Debug Logger Wrapper - ใช้จาก debug-logger.js โดยตรง
-function logSuccess(message) {
-    if (window.DebugLogger && typeof window.DebugLogger.success === 'function') {
-        window.DebugLogger.success(message);
-    } else {
-        console.log('✅ ' + message);
-    }
-}
-
-function logError(message) {
-    if (window.DebugLogger && typeof window.DebugLogger.error === 'function') {
-        window.DebugLogger.error(message);
-    } else {
-        console.error('❌ ' + message);
-    }
-}
-
-function logInfo(message) {
-    if (window.DebugLogger && typeof window.DebugLogger.info === 'function') {
-        window.DebugLogger.info(message);
-    } else {
-        console.info('ℹ️ ' + message);
-    }
-}
-
-function logWarning(message) {
-    if (window.DebugLogger && typeof window.DebugLogger.warning === 'function') {
-        window.DebugLogger.warning(message);
-    } else {
-        console.warn('⚠️ ' + message);
-    }
-}
 
 // ===============================================
-// ฟังก์ชันตรวจสอบ Admin Permission
+// ฟังก์ชันเริ่มต้นหน้า
 // ===============================================
-async function checkAdminPermission() {
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log("🔐 กำลังตรวจสอบสิทธิ์ Admin สำหรับหน้านี้...");
+    
     try {
-        logInfo('🔍 กำลังตรวจสอบสิทธิ์แอดมิน...');
+        // ตรวจสอบสิทธิ์ admin โดยตรง
+        const hasPermission = await checkAdminPermissionDirect();
         
-        const supabase = await window.authStatusManager.getSupabaseClient();
+        if (!hasPermission) {
+            // ถ้าไม่มีสิทธิ์ ให้แสดงข้อความและ redirect
+            Swal.fire({
+                icon: 'warning',
+                title: 'ไม่มีสิทธิ์เข้าถึง',
+                text: 'หน้านี้จำกัดการเข้าถึงเฉพาะผู้ดูแลระบบเท่านั้น',
+                confirmButtonText: 'กลับไปหน้า Dashboard',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                window.location.href = 'admin_dashboard.html';
+            });
+            return;
+        }
+        
+        // ถ้ามีสิทธิ์ ให้เริ่มต้นหน้าต่อไป
+        console.log("✅ Admin permission verified, loading page content...");
+        await initializePageContent();
+        
+    } catch (error) {
+        console.error("❌ Error during initialization:", error);
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาด',
+            text: 'ไม่สามารถเริ่มต้นหน้าได้: ' + error.message,
+            confirmButtonText: 'รีเฟรชหน้า'
+        }).then(() => {
+            window.location.reload();
+        });
+    }
+});
+
+// ===============================================
+// ฟังก์ชันตรวจสอบ admin permission แบบ direct (ไม่พึ่งฟังก์ชันภายนอก)
+// ===============================================
+async function checkAdminPermissionDirect() {
+    try {
+        console.log("🔍 เริ่มตรวจสอบสิทธิ์ Admin...");
+        
+        // เรียกใช้ Supabase client โดยตรง
+        const supabase = await getSupabaseClient();
         if (!supabase) {
-            logError('ไม่สามารถเชื่อมต่อกับ Supabase ได้');
+            console.error("❌ ไม่สามารถเชื่อมต่อ Supabase ได้");
             return false;
         }
         
-        // ตรวจสอบว่ามี session หรือไม่
-        const session = await window.authStatusManager.checkCurrentSession();
+        // ตรวจสอบ session ปัจจุบัน
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+            console.error("❌ Session error:", sessionError.message);
+            return false;
+        }
+        
         if (!session || !session.user) {
-            logWarning('ไม่มี session ผู้ใช้');
+            console.warn("⚠️ ไม่พบผู้ใช้ที่ล็อกอินอยู่");
             return false;
         }
         
-        // ดึงข้อมูลผู้ใช้ปัจจุบัน
-        const userProfile = await window.authStatusManager.fetchUserProfile(session.user);
+        const userId = session.user.id;
+        const userEmail = session.user.email;
+        console.log("👤 ผู้ใช้ที่ล็อกอิน:", userEmail, "ID:", userId);
+        
+        // ดึงข้อมูลผู้ใช้จากตาราง users โดยตรง
+        const { data: userProfile, error: profileError } = await supabase
+            .from('users')
+            .select('uid, email, role, display_name')
+            .eq('uid', userId)
+            .maybeSingle(); // ใช้ maybeSingle แทน single เพื่อไม่ให้ error ถ้าไม่เจอ
+        
+        if (profileError) {
+            console.error("❌ Error fetching user profile:", profileError.message);
+            return false;
+        }
+        
         if (!userProfile) {
-            logError('ไม่สามารถดึงข้อมูลโปรไฟล์ได้');
-            return false;
+            console.warn("⚠️ ไม่พบข้อมูลผู้ใช้ในตาราง users");
+            
+            // ลองค้นหาด้วย email ถ้าไม่เจอด้วย uid
+            const { data: userByEmail, error: emailError } = await supabase
+                .from('users')
+                .select('uid, email, role, display_name')
+                .eq('email', userEmail)
+                .maybeSingle();
+            
+            if (emailError) {
+                console.error("❌ Error fetching user by email:", emailError.message);
+                return false;
+            }
+            
+            if (!userByEmail) {
+                console.warn("⚠️ ไม่พบผู้ใช้ทั้งด้วย UID และ Email");
+                return false;
+            }
+            
+            console.log("📊 พบข้อมูลผู้ใช้ด้วย Email:", userByEmail);
+            
+            // ตรวจสอบ role
+            const userRole = userByEmail.role;
+            console.log("🎭 Role ของผู้ใช้:", userRole);
+            
+            const isAdmin = ['admin', 'administrator', 'superadmin'].includes(userRole);
+            console.log(isAdmin ? "✅ ผู้ใช้เป็น Admin" : "❌ ผู้ใช้ไม่ใช่ Admin");
+            
+            return isAdmin;
         }
         
-        logInfo(`ข้อมูลผู้ใช้ปัจจุบัน: ${userProfile.display_name}, บทบาท: ${userProfile.role}`);
+        console.log("📊 พบข้อมูลผู้ใช้:", userProfile);
         
-        // ตรวจสอบสิทธิ์ Admin
-        const isAdmin = userProfile.role === 'admin' || 
-                       userProfile.role === 'administrator' || 
-                       userProfile.role === 'superadmin';
+        // ตรวจสอบ role
+        const userRole = userProfile.role;
+        console.log("🎭 Role ของผู้ใช้:", userRole);
         
-        if (isAdmin) {
-            currentAdminId = session.user.id;
-            logSuccess('ตรวจสอบสิทธิ์แอดมินสำเร็จ');
-        } else {
-            logWarning('ผู้ใช้ไม่มีสิทธิ์แอดมิน');
-        }
+        const isAdmin = ['admin', 'administrator', 'superadmin'].includes(userRole);
+        console.log(isAdmin ? "✅ ผู้ใช้เป็น Admin" : "❌ ผู้ใช้ไม่ใช่ Admin");
         
         return isAdmin;
         
     } catch (error) {
-        logError('เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์: ' + error.message);
+        console.error("❌ Error in checkAdminPermissionDirect:", error.message);
         return false;
     }
 }
 
 // ===============================================
-// ฟังก์ชันเริ่มต้นหน้า
+// ฟังก์ชันโหลดเนื้อหาหลัก
 // ===============================================
-async function initializePage() {
-    logInfo('🔄 กำลังเริ่มต้นหน้า Admin Users Manager...');
-    
-    // ตรวจสอบสิทธิ์แอดมิน
-    const hasPermission = await checkAdminPermission();
-    if (!hasPermission) {
+async function initializePageContent() {
+    try {
+        console.log("🔄 กำลังเริ่มต้นหน้า Admin Users Manager...");
+        
+        // ตั้งค่า Event Listeners
+        document.getElementById('searchInput').addEventListener('keyup', filterUsers);
+        document.getElementById('roleFilter').addEventListener('change', filterUsers);
+        document.getElementById('gradeFilter').addEventListener('change', filterUsers);
+        
+        // โหลดข้อมูล
+        await loadMasterData();
+        await loadUsers();
+        
+        // ซ่อน loading status
+        document.getElementById('loadingStatus').classList.add('hidden');
+        
+        console.log("✅ หน้า Admin Users Manager พร้อมใช้งาน");
+        
+    } catch (error) {
+        console.error("❌ Error initializing page:", error);
+        
         Swal.fire({
             icon: 'error',
-            title: 'ไม่มีสิทธิ์เข้าถึง',
-            text: 'หน้านี้จำกัดการเข้าถึงเฉพาะผู้ดูแลระบบเท่านั้น',
-            confirmButtonText: 'กลับไปหน้า Dashboard',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then(() => {
-            window.location.href = 'admin_dashboard.html';
-        });
-        return;
-    }
-    
-    // ตรวจสอบความเข้ากันได้ของ auth_status_manager
-    if (window.RPCChecker && window.RPCChecker.checkAuthStatusManagerCompatibility) {
-        const authCompat = await window.RPCChecker.checkAuthStatusManagerCompatibility();
-        if (!authCompat) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'ระบบไม่สมบูรณ์',
-                text: 'กรุณารีเฟรชหน้าหรือตรวจสอบไฟล์ auth_status_manager.js',
-                confirmButtonText: 'รีเฟรช'
-            }).then(() => {
+            title: 'เกิดข้อผิดพลาด',
+            text: 'ไม่สามารถเริ่มต้นหน้าได้: ' + error.message,
+            confirmButtonText: 'รีเฟรชหน้า',
+            cancelButtonText: 'กลับไป Dashboard',
+            showCancelButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
                 window.location.reload();
-            });
-            return;
-        }
+            } else {
+                window.location.href = 'admin_dashboard.html';
+            }
+        });
     }
-    
-    // เริ่มต้น Debug Logger
-    if (window.DebugLogger && typeof window.DebugLogger.init === 'function') {
-        try {
-            window.DebugLogger.init();
-            logSuccess('DebugLogger เริ่มต้นสำเร็จ');
-        } catch (e) {
-            logWarning('DebugLogger init failed: ' + e.message);
-        }
-    }
-    
-    // ตั้งค่า event listeners
-    document.getElementById('searchInput').addEventListener('keyup', filterUsers);
-    document.getElementById('roleFilter').addEventListener('change', filterUsers);
-    document.getElementById('gradeFilter').addEventListener('change', filterUsers);
-    document.getElementById('newPassword')?.addEventListener('input', checkPasswordStrength);
-    
-    // โหลดข้อมูล
-    await loadMasterData();
-    await loadUsers();
-    
-    logSuccess('✅ หน้า Admin Users Manager พร้อมใช้งาน');
 }
 
 // ===============================================
@@ -640,7 +581,7 @@ async function initializePage() {
 // ===============================================
 async function loadMasterData() {
     try {
-        const supabase = await window.authStatusManager.getSupabaseClient();
+        const supabase = await getSupabaseClient();
         if (!supabase) {
             throw new Error('ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้');
         }
@@ -653,7 +594,7 @@ async function loadMasterData() {
             .order('display_order', { ascending: true });
         
         if (rolesError) {
-            logError('Error loading roles: ' + rolesError.message);
+            console.error('Error loading roles:', rolesError.message);
             currentRoles = [
                 { role_key: 'student', role_name_th: 'นักเรียน' },
                 { role_key: 'teacher', role_name_th: 'ครู' },
@@ -662,7 +603,7 @@ async function loadMasterData() {
             ];
         } else {
             currentRoles = roles || [];
-            logSuccess(`โหลดข้อมูล Roles สำเร็จ: ${currentRoles.length} รายการ`);
+            console.log(`✅ โหลดข้อมูล Roles สำเร็จ: ${currentRoles.length} รายการ`);
         }
         
         // โหลด Grades
@@ -673,7 +614,7 @@ async function loadMasterData() {
             .order('display_order', { ascending: true });
         
         if (gradesError) {
-            logError('Error loading grades: ' + gradesError.message);
+            console.error('Error loading grades:', gradesError.message);
             currentGrades = [
                 { grade_level: 1, grade_name_th: 'ประถมศึกษาปีที่ 1' },
                 { grade_level: 2, grade_name_th: 'ประถมศึกษาปีที่ 2' },
@@ -684,13 +625,13 @@ async function loadMasterData() {
             ];
         } else {
             currentGrades = grades || [];
-            logSuccess(`โหลดข้อมูล Grades สำเร็จ: ${currentGrades.length} รายการ`);
+            console.log(`✅ โหลดข้อมูล Grades สำเร็จ: ${currentGrades.length} รายการ`);
         }
         
         updateDropdownFilters();
         
     } catch (error) {
-        logError('Error loading master data: ' + error.message);
+        console.error('Error loading master data:', error.message);
         showError('ไม่สามารถโหลดข้อมูลพื้นฐานได้: ' + error.message);
     }
 }
@@ -730,18 +671,20 @@ async function loadUsers() {
     tableBody.innerHTML = '';
     
     try {
-        // ใช้ RPCChecker.callRPCSafely เพื่อโหลดข้อมูล
-        const result = await window.RPCChecker.callRPCSafely(
-            'get_all_users_for_admin',
-            {},
-            'ไม่สามารถดึงข้อมูลผู้ใช้ได้'
-        );
-        
-        if (!result.success) {
-            throw new Error(result.error || 'ไม่สามารถดึงข้อมูลผู้ใช้ได้');
+        const supabase = await getSupabaseClient();
+        if (!supabase) {
+            throw new Error('ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้');
         }
         
-        currentUsers = result.data || [];
+        // ดึงข้อมูลผู้ใช้ทั้งหมด
+        const { data: users, error } = await supabase
+            .from('users')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        currentUsers = users || [];
         
         updateStats(currentUsers);
         
@@ -755,12 +698,18 @@ async function loadUsers() {
         
         loadingStatus.classList.add('hidden');
         
-        logSuccess(`โหลดข้อมูล Users สำเร็จ: ${currentUsers.length} รายการ`);
+        console.log(`✅ โหลดข้อมูล Users สำเร็จ: ${currentUsers.length} รายการ`);
         
     } catch (error) {
         loadingStatus.classList.add('hidden');
-        logError('Exception in loadUsers: ' + error.message);
-        showError('เกิดข้อผิดพลาด: ' + error.message);
+        console.error("❌ Exception in loadUsers:", error);
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'เกิดข้อผิดพลาด',
+            text: 'ไม่สามารถดึงข้อมูลผู้ใช้ได้: ' + error.message,
+            confirmButtonText: 'ตกลง'
+        });
     }
 }
 
@@ -796,10 +745,6 @@ function renderUsersTable(users) {
         }
         
         const totalEggs = (user.total_eggs_basic || 0) + (user.total_eggs_premium || 0) + (user.community_eggs || 0);
-        const userEmail = user.email || 'ไม่มีอีเมล';
-        
-        // ตรวจสอบว่าเป็นผู้ใช้ปัจจุบันหรือไม่ (ไม่สามารถลบตัวเองได้)
-        const isCurrentUser = user.uid === currentAdminId;
         
         row.innerHTML = `
             <td class="px-6 py-4">
@@ -812,12 +757,12 @@ function renderUsersTable(users) {
                     }
                     <div>
                         <div class="text-sm font-medium text-gray-900">${user.display_name || 'ไม่มีชื่อ'}</div>
-                        <div class="text-xs text-gray-500 truncate max-w-xs" title="${user.uid}">UID: ${user.uid.substring(0, 8)}...</div>
+                        <div class="text-xs text-gray-500 truncate max-w-xs">UID: ${user.uid?.substring(0, 8) || 'N/A'}...</div>
                     </div>
                 </div>
             </td>
             <td class="px-6 py-4 text-sm text-gray-900">
-                ${userEmail}
+                ${user.email || 'ไม่มีอีเมล'}
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 py-1 text-xs font-semibold rounded-full ${user.role === 'admin' ? 'bg-red-100 text-red-800' : user.role === 'teacher' ? 'bg-green-100 text-green-800' : user.role === 'content_creator' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
@@ -853,17 +798,9 @@ function renderUsersTable(users) {
                             title="แก้ไขข้อมูล">
                         <i class="fas fa-edit"></i>
                     </button>
-
-                    <button onclick="showChangePasswordModal('${user.uid}', '${user.display_name || user.email}', '${user.email}')" 
-                            class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50" 
-                            title="เปลี่ยนรหัสผ่าน">
-                        <i class="fas fa-key"></i>
-                    </button>
-                    
-                    <button onclick="deleteUser('${user.uid}', '${user.display_name || user.email}', ${isCurrentUser})" 
-                            class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 ${isCurrentUser ? 'opacity-50 cursor-not-allowed' : ''}" 
-                            title="${isCurrentUser ? 'ไม่สามารถลบบัญชีตัวเองได้' : 'ลบผู้ใช้'}"
-                            ${isCurrentUser ? 'disabled' : ''}>
+                    <button onclick="deleteUser('${user.uid}', '${user.display_name || user.email}')" 
+                            class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" 
+                            title="ลบผู้ใช้">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -873,6 +810,10 @@ function renderUsersTable(users) {
         tableBody.appendChild(row);
     });
 }
+
+// ===============================================
+// MODAL MANAGEMENT FUNCTIONS
+// ===============================================
 
 // อัปเดต dropdowns ในฟอร์ม
 function updateFormDropdowns() {
@@ -895,6 +836,41 @@ function updateFormDropdowns() {
         option.textContent = grade.grade_name_th;
         gradeSelect.appendChild(option);
     });
+}
+
+// แสดง Modal สำหรับเพิ่ม User ใหม่
+function showAddUserModal() {
+    isEditMode = false;
+    document.getElementById('modalTitle').textContent = 'เพิ่มผู้ใช้ใหม่';
+    document.getElementById('submitButton').innerHTML = '<i class="fas fa-plus mr-2"></i>สร้างผู้ใช้';
+    
+    document.getElementById('userId').value = '';
+    document.getElementById('uid').value = '';
+    document.getElementById('uid').classList.add('hidden');
+    document.getElementById('uidInfo').classList.remove('hidden');
+    
+    document.getElementById('passwordContainer').classList.remove('hidden');
+    document.getElementById('password').setAttribute('required', 'required');
+    
+    document.getElementById('emailEditWarning').classList.add('hidden');
+    
+    document.getElementById('userForm').reset();
+    document.getElementById('totalEggsBasic').value = 10;
+    document.getElementById('totalEggsPremium').value = 0;
+    document.getElementById('communityEggs').value = 0;
+    
+    updateFormDropdowns();
+    
+    // Set default role to student
+    const roleSelect = document.getElementById('role');
+    if (roleSelect.options.length > 1) {
+        roleSelect.value = 'student';
+    }
+    
+    // Set default creator status
+    document.querySelector('input[name="creatorStatus"][value="false"]').checked = true;
+    
+    document.getElementById('userModal').classList.remove('hidden');
 }
 
 // แสดง Modal สำหรับแก้ไข User
@@ -959,6 +935,12 @@ async function saveUser(event) {
     event.preventDefault();
     
     try {
+        const supabase = await getSupabaseClient();
+        if (!supabase) {
+            showError('ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้');
+            return;
+        }
+        
         const userData = {
             email: document.getElementById('email').value.trim(),
             display_name: document.getElementById('displayName').value.trim() || null,
@@ -976,70 +958,44 @@ async function saveUser(event) {
             return;
         }
         
+        const userId = document.getElementById('userId').value;
+        
         let result;
         
-        if (isEditMode) {
-            // แก้ไขผู้ใช้ที่มีอยู่
-            const existingUid = document.getElementById('uid').value;
+        if (isEditMode && userId) {
+            // แก้ไขข้อมูล
+            const { data, error } = await supabase
+                .from('users')
+                .update({
+                    ...userData,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('uid', userId)
+                .select();
             
-            if (!existingUid) {
-                showError('ไม่พบ UID ของผู้ใช้ที่ต้องการแก้ไข');
-                return;
-            }
+            if (error) throw error;
+            result = data[0];
             
-            result = await window.RPCChecker.callRPCSafely(
-                'update_user_admin_simple',
-                {
-                    p_uid: existingUid,
-                    p_email: userData.email,
-                    p_display_name: userData.display_name,
-                    p_role: userData.role,
-                    p_grade: userData.grade,
-                    p_total_eggs_basic: userData.total_eggs_basic,
-                    p_total_eggs_premium: userData.total_eggs_premium,
-                    p_community_eggs: userData.community_eggs,
-                    p_creator_status: userData.creator_status,
-                    p_bio: userData.bio
-                },
-                'ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้'
-            );
+            console.log(`✅ อัปเดตผู้ใช้สำเร็จ: ${userData.display_name || userData.email}`);
             
         } else {
-            // สร้างผู้ใช้ใหม่
-            const password = document.getElementById('password').value;
+            // เพิ่มข้อมูลใหม่
+            const { data, error } = await supabase
+                .from('users')
+                .insert([userData])
+                .select();
             
-            if (!password || password.length < 6) {
-                showError('กรุณาระบุรหัสผ่านอย่างน้อย 6 ตัวอักษร');
-                return;
-            }
+            if (error) throw error;
+            result = data[0];
             
-            result = await window.RPCChecker.callRPCSafely(
-                'create_user_admin_simple',
-                {
-                    p_email: userData.email,
-                    p_password: password,
-                    p_display_name: userData.display_name,
-                    p_role: userData.role,
-                    p_grade: userData.grade,
-                    p_total_eggs_basic: userData.total_eggs_basic,
-                    p_total_eggs_premium: userData.total_eggs_premium,
-                    p_community_eggs: userData.community_eggs,
-                    p_creator_status: userData.creator_status,
-                    p_bio: userData.bio
-                },
-                'ไม่สามารถสร้างผู้ใช้ได้'
-            );
+            console.log(`✅ สร้างผู้ใช้สำเร็จ: ${userData.display_name || userData.email}`);
         }
         
-        if (!result.success) {
-            throw new Error(result.error || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
-        }
-        
-        logSuccess(`${isEditMode ? 'อัปเดต' : 'สร้าง'}ผู้ใช้สำเร็จ: ${userData.display_name || userData.email}`);
-        
+        // ปิด Modal และรีเฟรชข้อมูล
         closeUserModal();
         await loadUsers();
         
+        // แสดงข้อความสำเร็จ
         Swal.fire({
             icon: 'success',
             title: 'สำเร็จ!',
@@ -1049,223 +1005,20 @@ async function saveUser(event) {
         });
         
     } catch (error) {
-        logError('Error saving user: ' + error.message);
-        showError('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
-    }
-}
-
-// ===============================================
-// ฟังก์ชันจัดการรหัสผ่าน
-// ===============================================
-
-// แสดง Modal สำหรับเปลี่ยนรหัสผ่าน
-function showChangePasswordModal(userId, userName, userEmail) {
-    document.getElementById('passwordUserId').value = userId;
-    document.getElementById('passwordUserName').textContent = userName;
-    document.getElementById('passwordUserEmail').textContent = `(${userEmail})`;
-    
-    document.getElementById('passwordForm').reset();
-    document.getElementById('passwordStrength').textContent = '-';
-    document.getElementById('passwordStrengthBar').style.width = '0%';
-    document.getElementById('passwordStrengthBar').className = 'bg-red-500 h-2 rounded-full';
-    
-    document.getElementById('passwordModal').classList.remove('hidden');
-    
-    logInfo(`เปิด modal เปลี่ยนรหัสผ่านสำหรับผู้ใช้: ${userName} (${userEmail})`);
-}
-
-// ปิด Modal รหัสผ่าน
-function closePasswordModal() {
-    document.getElementById('passwordModal').classList.add('hidden');
-}
-
-// ตรวจสอบความแข็งแกร่งของรหัสผ่าน
-function checkPasswordStrength() {
-    const password = document.getElementById('newPassword').value;
-    let strength = 0;
-    let text = '';
-    let barColor = 'bg-red-500';
-    
-    if (password.length >= 6) strength += 1;
-    if (password.length >= 8) strength += 1;
-    if (/[A-Z]/.test(password)) strength += 1;
-    if (/[0-9]/.test(password)) strength += 1;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-    
-    switch(strength) {
-        case 0:
-        case 1:
-            text = 'อ่อนมาก';
-            barColor = 'bg-red-500';
-            break;
-        case 2:
-            text = 'อ่อน';
-            barColor = 'bg-orange-500';
-            break;
-        case 3:
-            text = 'ปานกลาง';
-            barColor = 'bg-yellow-500';
-            break;
-        case 4:
-            text = 'แข็ง';
-            barColor = 'bg-green-500';
-            break;
-        case 5:
-            text = 'แข็งมาก';
-            barColor = 'bg-green-600';
-            break;
-    }
-    
-    const percentage = (strength / 5) * 100;
-    document.getElementById('passwordStrength').textContent = text;
-    document.getElementById('passwordStrengthBar').style.width = `${percentage}%`;
-    document.getElementById('passwordStrengthBar').className = `${barColor} h-2 rounded-full`;
-}
-
-// อัปเดตรหัสผ่าน
-async function updatePassword(event) {
-    event.preventDefault();
-    
-    const userId = document.getElementById('passwordUserId').value;
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const button = document.getElementById('passwordSubmitButton');
-    
-    try {
-        // Validation
-        if (!newPassword || !confirmPassword) {
-            showError('โปรดกรอกรหัสผ่านทั้งสองช่อง');
-            return;
-        }
+        console.error('Error saving user:', error);
         
-        if (newPassword !== confirmPassword) {
-            showError('รหัสผ่านไม่ตรงกัน');
-            return;
-        }
-        
-        if (newPassword.length < 6) {
-            showError('รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร');
-            return;
-        }
-        
-        // Disable button during process
-        const originalText = button.innerHTML;
-        button.disabled = true;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>กำลังเปลี่ยนรหัสผ่าน...';
-        
-        // ใช้ RPC function reset_user_password_admin
-        const result = await window.RPCChecker.callRPCSafely(
-            'reset_user_password_admin',
-            {
-                p_user_id: userId,
-                p_new_password: newPassword
-            },
-            'ไม่สามารถเปลี่ยนรหัสผ่านได้'
-        );
-        
-        if (!result.success) {
-            throw new Error(result.error || 'เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน');
-        }
-        
-        // Success
-        closePasswordModal();
-        
-        Swal.fire({
-            icon: 'success',
-            title: 'เปลี่ยนรหัสผ่านสำเร็จ!',
-            text: 'รหัสผ่านของผู้ใช้ถูกเปลี่ยนเรียบร้อยแล้ว',
-            timer: 2000,
-            showConfirmButton: false
-        });
-        
-        logSuccess(`เปลี่ยนรหัสผ่านสำเร็จสำหรับผู้ใช้: ${document.getElementById('passwordUserName').textContent}`);
-        
-    } catch (error) {
-        logError('Error updating password: ' + error.message);
-        
-        if (error.message.includes('reset_user_password_admin') || error.message.includes('function does not exist')) {
-            showError('ฟังก์ชัน reset_user_password_admin ยังไม่พร้อมใช้งาน');
-            showRPCPasswordCreationInstructions();
+        if (error.code === '23505') { // Unique violation
+            showError('อีเมลนี้มีอยู่ในระบบแล้ว กรุณาใช้อีเมลอื่น');
         } else {
-            showError('เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน: ' + error.message);
+            showError('บันทึกข้อมูลไม่สำเร็จ: ' + error.message);
         }
-    } finally {
-        // Re-enable button
-        button.disabled = false;
-        button.innerHTML = '<i class="fas fa-save mr-2"></i>อัพเดตรหัสผ่าน';
     }
-}
-
-// แสดงคำแนะนำการสร้าง RPC function สำหรับ reset password
-function showRPCPasswordCreationInstructions() {
-    Swal.fire({
-        icon: 'info',
-        title: 'ต้องการ RPC Function',
-        html: `
-            <div class="text-left">
-                <p>สำหรับการเปลี่ยนรหัสผ่าน <strong>ผู้อื่น</strong> ต้องการ RPC function ใน Supabase:</p>
-                <div class="mt-3 p-2 bg-gray-100 rounded text-xs overflow-auto max-h-60">
-                    <pre>
--- สร้างฟังก์ชัน reset รหัสผ่านสำหรับ admin
-CREATE OR REPLACE FUNCTION reset_user_password_admin(
-    p_user_id uuid,
-    p_new_password text
-)
-RETURNS boolean
-SECURITY DEFINER
-SET search_path = auth, public
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    v_admin_user_id uuid;
-BEGIN
-    -- ตรวจสอบว่า user ที่เรียกใช้เป็น admin
-    SELECT uid INTO v_admin_user_id 
-    FROM public.users 
-    WHERE uid = auth.uid() 
-    AND role IN ('admin', 'administrator', 'superadmin');
-    
-    IF v_admin_user_id IS NULL THEN
-        RAISE EXCEPTION 'Unauthorized: Admin access required';
-    END IF;
-
-    -- อัปเดตรหัสผ่านใน auth.users โดยใช้ pgcrypto
-    UPDATE auth.users 
-    SET encrypted_password = crypt(p_new_password, gen_salt('bf')),
-        updated_at = now()
-    WHERE id = p_user_id;
-    
-    RETURN FOUND;
-END;
-$$;
-
--- เปิดสิทธิ์ให้ฟังก์ชันนี้สามารถเรียกใช้ได้
-GRANT EXECUTE ON FUNCTION reset_user_password_admin(uuid, text) TO authenticated;
-                    </pre>
-                </div>
-                <p class="mt-3 text-sm text-gray-600">หมายเหตุ: ต้องมี extension "pgcrypto" ใน database</p>
-            </div>
-        `,
-        confirmButtonText: 'เข้าใจแล้ว',
-        showCancelButton: true,
-        cancelButtonText: 'เปิด SQL Editor',
-        showCloseButton: true
-    }).then((result) => {
-        if (result.dismiss === 'cancel') {
-            window.open('https://supabase.com/dashboard/project/oibubvhuiuurkxhnefsw/sql', '_blank');
-        }
-    });
 }
 
 // ===============================================
 // ฟังก์ชันลบผู้ใช้
 // ===============================================
-async function deleteUser(userId, userName, isCurrentUser = false) {
-    if (isCurrentUser) {
-        showError('ไม่สามารถลบบัญชีของคุณเองได้');
-        return;
-    }
-    
+async function deleteUser(userId, userName) {
     const result = await Swal.fire({
         title: 'ยืนยันการลบ',
         html: `คุณแน่ใจว่าต้องการลบผู้ใช้ "<b>${userName}</b>" ใช่หรือไม่?<br>
@@ -1281,17 +1034,20 @@ async function deleteUser(userId, userName, isCurrentUser = false) {
     if (!result.isConfirmed) return;
     
     try {
-        const deleteResult = await window.RPCChecker.callRPCSafely(
-            'delete_user_admin_simple',
-            { p_user_id: userId },
-            'ไม่สามารถลบผู้ใช้ได้'
-        );
-        
-        if (!deleteResult.success) {
-            throw new Error(deleteResult.error || 'เกิดข้อผิดพลาดในการลบข้อมูล');
+        const supabase = await getSupabaseClient();
+        if (!supabase) {
+            showError('ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้');
+            return;
         }
         
-        logSuccess(`ลบผู้ใช้สำเร็จ: ${userName}`);
+        const { error } = await supabase
+            .from('users')
+            .delete()
+            .eq('uid', userId);
+        
+        if (error) throw error;
+        
+        console.log(`✅ ลบผู้ใช้สำเร็จ: ${userName}`);
         
         await loadUsers();
         
@@ -1304,8 +1060,13 @@ async function deleteUser(userId, userName, isCurrentUser = false) {
         });
         
     } catch (error) {
-        logError('Error deleting user: ' + error.message);
-        showError('เกิดข้อผิดพลาดในการลบข้อมูล: ' + error.message);
+        console.error('Error deleting user:', error);
+        
+        if (error.code === '23503') { // Foreign key violation
+            showError('ไม่สามารถลบผู้ใช้นี้ได้ เนื่องจากมีข้อมูลอื่นๆ ที่เชื่อมโยงอยู่');
+        } else {
+            showError('ลบข้อมูลไม่สำเร็จ: ' + error.message);
+        }
     }
 }
 
@@ -1368,44 +1129,40 @@ function showError(message) {
 }
 
 // ===============================================
-// ฟังก์ชันออกจากระบบ (เพิ่มสำหรับ Admin Header)
+// ฟังก์ชันออกจากระบบ
 // ===============================================
 async function adminLogout() {
     try {
-        const supabase = window.authStatusManager ? await window.authStatusManager.getSupabaseClient() : null;
+        const supabase = await getSupabaseClient();
         if (supabase) {
             await supabase.auth.signOut();
+            window.location.href = 'login_supabase.html';
         }
-        window.location.href = 'index.html';
     } catch (error) {
-        console.error('Logout error:', error);
+        console.error("❌ Logout error:", error);
         window.location.href = 'index.html';
     }
 }
 
 // ===============================================
-// เริ่มต้นหน้าเมื่อ DOM พร้อม
+// Helper function สำหรับ getSupabaseClient
 // ===============================================
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('📁 Admin Users Manager (Version 8) Initializing...');
+async function getSupabaseClient() {
+    if (typeof window.getSupabaseClient === 'function') {
+        return window.getSupabaseClient();
+    } else if (window.authStatusManager && typeof window.authStatusManager.getSupabaseClient === 'function') {
+        return window.authStatusManager.getSupabaseClient();
+    } else if (window.SupabaseConfig && typeof window.SupabaseConfig.client === 'function') {
+        return window.SupabaseConfig.client();
+    } else if (window.supabaseClient) {
+        return window.supabaseClient;
+    }
     
-    // รอให้ไฟล์อื่นโหลดเสร็จ
-    setTimeout(async () => {
-        await initializePage();
-    }, 500);
-});
-
-// Export functions สำหรับการทดสอบ
-window.AdminUsersManager = {
-    initializePage,
-    loadUsers,
-    saveUser,
-    deleteUser,
-    updatePassword,
-    checkRPCStatus
-};
+    console.error('❌ No Supabase client found');
+    return null;
+}
     </script>
- 
+
     <style>
         .hover-scale {
             transition: transform 0.2s ease-in-out;
@@ -1436,25 +1193,8 @@ window.AdminUsersManager = {
             background: #555;
         }
         
-        .avatar-fallback {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #3b82f6;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        #userModal > div, #passwordModal > div {
-            animation: modalFadeIn 0.3s ease-out;
+        .hidden {
+            display: none;
         }
         
         tbody tr {
@@ -1464,11 +1204,6 @@ window.AdminUsersManager = {
         tbody tr:hover {
             background-color: #f9fafb;
         }
-        
-        .hidden {
-            display: none;
-        }
     </style>
-
 </body>
 </html>
